@@ -1,0 +1,6 @@
+name: MLStoneDrop
+version: '${project.version}'
+main: me.isenzo.mlstonedrop.MLStoneDrop
+api-version: '1.18'
+authors: [Senzo13]
+description: Plugin na drop z kamienia
