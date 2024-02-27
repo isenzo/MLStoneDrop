@@ -6,7 +6,7 @@
 
   <groupId>me.isenzo</groupId>
   <artifactId>MLStoneDrop</artifactId>
-  <version>1.0.0</version>
+  <version>1.0.1</version>
   <packaging>jar</packaging>
 
   <name>MLStoneDrop</name>
@@ -41,6 +41,31 @@
           </execution>
         </executions>
       </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.2.0</version>
+            <executions>
+                <execution>
+                    <id>copy-resources</id>
+                    <phase>install</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                        <outputDirectory>C:/MC_serwer/1.20.1/plugins</outputDirectory>
+                        <resources>
+                            <resource>
+                                <directory>${project.build.directory}</directory>
+                                <includes>
+                                    <include>${project.build.finalName}.jar</include>
+                                </includes>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
     </plugins>
     <resources>
       <resource>
@@ -66,6 +91,18 @@
           <groupId>org.spigotmc</groupId>
           <artifactId>spigot-api</artifactId>
           <version>1.18-R0.1-SNAPSHOT</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>net.luckperms</groupId>
+          <artifactId>api</artifactId>
+          <version>5.4</version>
+          <scope>provided</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.projectlombok</groupId>
+          <artifactId>lombok</artifactId>
+          <version>1.18.30</version>
           <scope>provided</scope>
       </dependency>
   </dependencies>

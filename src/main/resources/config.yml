@@ -1,0 +1,7 @@
+drops:
+  GOLD_INGOT:
+    item_name: "&6Gold"
+    default-chance: 0.12
+    vip-chance: 0.21
+    svip-chance: 0.37
+    sponsor-chance: 0.37

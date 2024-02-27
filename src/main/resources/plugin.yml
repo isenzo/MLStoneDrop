@@ -1,6 +1,21 @@
 name: MLStoneDrop
 version: '${project.version}'
-main: me.isenzo.mlstonedrop.MLStoneDrop
+main: me.isenzo.mlstonedrop.Main
 api-version: '1.18'
 authors: [Senzo13]
 description: Plugin na drop z kamienia
+commands:
+  drop:
+    description: Otwiera GUI konfiguracji dropu.
+    usage: /<command>
+  mldrop:
+    description: Komendy administracyjne dla pluginu MLStoneDrop.
+    usage: |
+      /mldrop admin update <material> <grupa> <nowa_szansa> [nowa_nazwa] - Aktualizuje szansę i opcjonalnie nazwę przedmiotu.
+      /mldrop admin add <material> - Dodaje nowy przedmiot z domyślną szansą 0%.
+      /mldrop admin del <material> - Usuwa przedmiot z konfiguracji.
+    permission: mldrop.admin
+permissions:
+  mldrop.admin:
+    description: Dostęp do wszystkich komend administracyjnych MLStoneDrop.
+    default: op
