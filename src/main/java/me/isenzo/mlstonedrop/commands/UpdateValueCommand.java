@@ -143,14 +143,14 @@ public class UpdateValueCommand implements CommandExecutor {
 
     private boolean handleUpdateNameCommand(CommandSender sender, String[] args) {
         if (args.length < 4) {
-            sender.sendMessage(ChatColor.RED + "§8[§6MLDrop§8] §cNiepoprawne użycie komendy. Poprawne użycie: /mldrop admin update-name <materiał> <nowa_nazwa>");
+            sender.sendMessage("§8[§6MLDrop§8] §cNiepoprawne użycie komendy. Poprawne użycie: /mldrop admin update-name <materiał> <nowa_nazwa>");
             return true;
         }
 
         String materialName = args[2].toUpperCase();
         Material material = Material.matchMaterial(materialName);
         if (material == null) {
-            sender.sendMessage(ChatColor.RED + "§8[§6MLDrop§8] §cNie znaleziono materiału: §6" + materialName);
+            sender.sendMessage("§8[§6MLDrop§8] §cNie znaleziono materiału: §6" + materialName);
             return true;
         }
 

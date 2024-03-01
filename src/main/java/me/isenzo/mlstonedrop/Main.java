@@ -1,5 +1,6 @@
 package me.isenzo.mlstonedrop;
 
+import lombok.Getter;
 import me.isenzo.mlstonedrop.commands.DropCommand;
 import me.isenzo.mlstonedrop.commands.UpdateValueCommand;
 import me.isenzo.mlstonedrop.config.ConfigManager;
@@ -11,6 +12,7 @@ import net.luckperms.api.LuckPerms;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+@Getter
 public final class Main extends JavaPlugin{
     private static Main instance;
     private ConfigManager configManager;
@@ -43,23 +45,7 @@ public final class Main extends JavaPlugin{
         getLogger().info("Plugin został wyłączony.");
     }
 
-    public static Main getInstance() {
-        return instance;
-    }
-
-    public ConfigManager getConfigManager() {
-        return configManager;
-    }
-
-    public DropManager getDropManager() {
-        return dropManager;
-    }
-
     public GUIManager getGUIManager() {
         return guiManager;
-    }
-
-    public PlayerDropManager getPlayerDropManager() {
-        return playerDropManager;
     }
 }

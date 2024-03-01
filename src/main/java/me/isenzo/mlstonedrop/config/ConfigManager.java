@@ -29,7 +29,6 @@ public class ConfigManager {
                 if (material != null) {
                     ConfigurationSection materialSection = dropsSection.getConfigurationSection(key);
                     if (materialSection != null) {
-                        // Now we consider the highest priority chance available for the player
                         double chance = materialSection.getDouble("default-chance", 0.0);
                         dropChances.put(material, chance);
                     }
@@ -39,29 +38,17 @@ public class ConfigManager {
         return dropChances;
     }
 
-    // Nowa metoda do pobierania zakresu wysokości, z której przedmiot może być zrzucany.
     public int[] getDropHeightRange(Material material) {
         String key = material.name().toLowerCase();
         ConfigurationSection dropSection = getConfig().getConfigurationSection("drops." + key);
         if (dropSection != null) {
-            int minY = dropSection.getInt("min-y", 0); // Domyślna minimalna wysokość
-            int maxY = dropSection.getInt("max-y", 256); // Domyślna maksymalna wysokość
+            int minY = dropSection.getInt("min-y", 0);
+            int maxY = dropSection.getInt("max-y", 256);
             return new int[]{minY, maxY};
         }
-        return new int[]{0, 256}; // Zakres domyślny, jeśli nie określono
+        return new int[]{0, 256};
     }
 
-    // Metody do pobierania szansy dropu dla różnych grup uprzywilejowanych
-    public double getGroupChance(Material material, String group) {
-        String key = material.name().toLowerCase();
-        ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
-        if (materialSection != null) {
-            return materialSection.getDouble(group + "-chance", getGroupDefaultChance(material)); // Pobiera szansę dla grupy lub domyślną szansę
-        }
-        return 0.0;
-    }
-
-    // Metoda do pobierania domyślnej szansy dropu dla danego materiału
     public double getGroupDefaultChance(Material material) {
         String key = material.name().toLowerCase();
         ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
@@ -71,17 +58,40 @@ public class ConfigManager {
         return 0.0;
     }
 
+    public double getGroupVipChance(Material material) {
+        String key = material.name().toLowerCase();
+        ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
+        if (materialSection != null) {
+            return materialSection.getDouble("vip-chance", 0.0);
+        }
+        return 0.0;
+    }
+
+    public double getGroupSvipChance(Material material) {
+        String key = material.name().toLowerCase();
+        ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
+        if (materialSection != null) {
+            return materialSection.getDouble("svip-chance", 0.0);
+        }
+        return 0.0;
+    }
+
+    public double getGroupSponsorChance(Material material) {
+        String key = material.name().toLowerCase();
+        ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
+        if (materialSection != null) {
+            return materialSection.getDouble("sponsor-chance", 0.0);
+        }
+        return 0.0;
+    }
+
     public String getItemName(Material material) {
         String key = material.name().toLowerCase();
         ConfigurationSection materialSection = getConfig().getConfigurationSection("drops." + key);
         if (materialSection != null) {
-            return materialSection.getString("item_name", material.name()); // Domyślnie zwraca nazwę materialu, jeśli nie określono
+            return materialSection.getString("item_name", material.name());
         }
-        return material.name(); // Zwraca nazwę materialu, jeśli sekcja nie istnieje
-    }
-
-    public void saveConfig() {
-        plugin.saveConfig();
+        return material.name();
     }
 
     public void reloadConfig() {
