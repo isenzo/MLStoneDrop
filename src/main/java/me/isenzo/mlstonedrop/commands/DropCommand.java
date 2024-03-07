@@ -1,29 +1,24 @@
 package me.isenzo.mlstonedrop.commands;
 
+import lombok.RequiredArgsConstructor;
 import me.isenzo.mlstonedrop.Main;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+@RequiredArgsConstructor
 public class DropCommand implements CommandExecutor {
-    private Main plugin;
-
-    public DropCommand(Main plugin) {
-        this.plugin = plugin;
-    }
+    private final Main plugin;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        Player player = (Player) sender;
-
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("§8[§6MLDrop§8]§c Ta komenda może być użyta tylko przez gracza.");
+        if (sender instanceof Player) {
+            plugin.getGuiManager().openDropSettingsGUI(((Player) sender).getPlayer(), 1);
+            return true;
+        } else {
+            sender.sendMessage("§8[§6MLDrop§8]§c Ta komenda moze byc uzyta tylko przez gracza.");
             return true;
         }
-
-        plugin.getGUIManager().openDropSettingsGUI(player);
-        return true;
     }
-
 }

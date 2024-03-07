@@ -1,0 +1,106 @@
+@RequiredArgsConstructor
+public class GUIManager {
+
+    private final Main plugin;
+    private final DropChance dropChance;
+
+    public void openDropSettingsGUI(Player player) {
+
+        int itemsPerPage = 18;
+        Map<Material, DropChance> drops = plugin.getConfigManager().getDropChances();
+//        List<Map.Entry<Material, Double>> dropList = new ArrayList<>(drops.entrySet());
+
+        int totalItems = drops.size();
+        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
+        int page = 1;
+
+        Inventory gui = Bukkit.createInventory(null, 9 * 6, "§aDrop z kamienia - Strona " + page);
+
+        ItemStack grayPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+        ItemMeta paneMeta = grayPane.getItemMeta();
+        if (paneMeta != null) {
+            paneMeta.setDisplayName(" ");
+            grayPane.setItemMeta(paneMeta);
+        }
+
+        for (int i = 0; i < gui.getSize(); i++) {
+            gui.setItem(i, grayPane);
+        }
+
+        int rows = 2; // Liczba środkowych wierszy
+        int cols = 20; // Dostępne kolumny w środkowych wierszach po pominięciu dwóch kolumn
+        int middleRowStart = 18; // Startujemy od 20, pomijając dwie pierwsze kolumny w 3 wierszu
+        int itemsToPlace = Math.min(drops.size(), rows * cols); // Liczba przedmiotów do umieszczenia, ograniczona przez dostępną przestrzeń
+        int index = middleRowStart + (cols - itemsToPlace % cols) / 2; // Centrujemy przedmioty w wierszu
+
+        drops.forEach(((material, dropChance1) -> {
+            ItemStack item = new ItemStack(material, 1);
+            ItemMeta meta = item.getItemMeta();
+            if (Objects.nonNull(meta)) {
+                String itemName = plugin.getConfigManager().getItemName(material);
+                meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', itemName));
+                List<String> lore = new ArrayList<>();
+                lore.add("§7Szansa wypadnięcia:");
+                lore.add("§7Default: §f" + plugin.getConfigManager().getGroupDefaultChance(material) * 100 + "%");
+                lore.add("§6VIP: §a" + plugin.getConfigManager().getGroupVipChance(material) * 100 + "%");
+                lore.add("§eSVIP: §b" + plugin.getConfigManager().getGroupSvipChance(material) * 100 + "%");
+                lore.add("§3Sponsor: §b" + plugin.getConfigManager().getGroupSponsorChance(material) * 100 + "%");
+                lore.add("§===============================");
+                lore.add("§7min y: §f" + plugin.getConfigManager().getMinY(material));
+                lore.add("§7max y: §f" + plugin.getConfigManager().getMaxY(material));
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            }
+            gui.setItem(index++, item);
+
+            if ((index - middleRowStart) % 9 == cols) {
+                index += 2;
+            }
+            if (index >= middleRowStart + rows * 9) {
+                break;
+            }
+        }));
+
+        if (totalPages > 1) {
+            if (page > 1) {
+                ItemStack previousPage = new ItemStack(Material.ARROW);
+                ItemMeta previousPageMeta = previousPage.getItemMeta();
+                if (previousPageMeta != null) {
+                    previousPageMeta.setDisplayName("§cPoprzednia strona");
+                    previousPage.setItemMeta(previousPageMeta);
+                }
+                gui.setItem(0, previousPage);
+            }
+
+            if (page < totalPages) {
+                ItemStack nextPage = new ItemStack(Material.ARROW);
+                ItemMeta nextPageMeta = nextPage.getItemMeta();
+                if (nextPageMeta != null) {
+                    nextPageMeta.setDisplayName("§eNastępna strona");
+                    nextPage.setItemMeta(nextPageMeta);
+                }
+                gui.setItem(8, nextPage);
+            }
+        }
+
+        boolean directDropEnabled = plugin.getPlayerDropManager().directDrop(player.getUniqueId());
+        boolean cobbleDropEnabled = plugin.getPlayerDropManager().cobbleDropFromStone(player.getUniqueId());
+
+        updateDropItem(gui, 52, cobbleDropEnabled, "§eDrop cobblestone");
+        updateDropItem(gui, 53, directDropEnabled, "§eDrop do ekwipunku");
+
+        player.openInventory(gui);
+    }
+
+    private void updateDropItem(Inventory gui, int slot, boolean isEnabled, String displayName) {
+        Material material = isEnabled ? Material.LIME_CONCRETE : Material.RED_CONCRETE;
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(displayName);
+            meta.setLore(Arrays.asList(isEnabled ? "§7Kliknij, aby §cwyłączyć" : "§7Kliknij, aby §awłączyć"));
+            item.setItemMeta(meta);
+        }
+        gui.setItem(slot, item);
+    }
+}

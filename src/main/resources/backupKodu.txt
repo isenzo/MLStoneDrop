@@ -1,0 +1,63 @@
+//    public void loadDropSettings() {
+//        File file = new File(plugin.getDataFolder(), "playerDropSettings.yml");
+//        if (!file.exists()) return;
+//
+//        FileConfiguration config = YamlConfiguration.loadConfiguration(file);
+//        config.getKeys(false).forEach(key -> {
+//            UUID uuid = UUID.fromString(key);
+//            cobbleDropFromStone.put(uuid, config.getBoolean(key + ".cobbleDrop", true));
+//            directDrop.put(uuid, config.getBoolean(key + ".directDrop", true));
+//        });
+//    }
+
+
+---- logika dropu w DropManager
+//            event.setDropItems(!cobbleDropFromStone);
+//
+//            Map<Material, Double> drops = plugin.getConfigManager().getDropChances();
+//            for (Material material : drops.keySet()) {
+//
+//                double chance = getChanceForPlayerAndMaterial(player, material);
+//                if (Math.random() < chance) {
+//                    ItemStack itemStack = new ItemStack(material, 1);
+//                    dropItem(player, block, itemStack, directDrop);
+//                    return;
+//                }
+//
+//            }
+
+
+-- logika szansy na wypadnięcie z ConfigManager.java
+    //    public Map<Material, Double> getDropChances() {
+//        Map<Material, Double> dropChances = new HashMap<>();
+//        ConfigurationSection dropsSection = getConfig().getConfigurationSection("drops");
+//        if (dropsSection != null) {
+//            for (String key : dropsSection.getKeys(false)) {
+//                Material material = Material.matchMaterial(key);
+//                if (material != null) {
+//                    ConfigurationSection materialSection = dropsSection.getConfigurationSection(key);
+//                    if (materialSection != null) {
+//                        double chance = materialSection.getDouble("default-chance", 0.0);
+//                        dropChances.put(material, chance);
+//                    }
+//                }
+//            }
+//        }
+//        return dropChances;
+//    }
+
+
+            lore.add("§9===============================");
+            lore.add("§7Default: §f" + String.format("%.2f%%", plugin.getConfigManager().getGroupDefaultChance(material) * 100));
+            lore.add("§6VIP: §a" + String.format("%.2f%%", plugin.getConfigManager().getGroupVipChance(material) * 100));
+            lore.add("§eSVIP: §b" + String.format("%.2f%%", plugin.getConfigManager().getGroupSvipChance(material) * 100));
+            lore.add("§3Sponsor: §b" + String.format("%.2f%%", plugin.getConfigManager().getGroupSponsorChance(material) * 100 ));
+            lore.add("§9===============================");
+
+                    if (args[1].equalsIgnoreCase("update-name")) {
+                        return plugin.getUpdateNameCommand().handleUpdateNameCommand(sender, args);
+                    }
+
+                    if (args[1].equalsIgnoreCase("update-chance") || args[1].equalsIgnoreCase("u-c")) {
+                        return plugin.getUpdateChanceCommand().handleUpdateChanceCommand(sender, args);
+                    }
